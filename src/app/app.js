@@ -1,0 +1,30 @@
+import { MONGODB_CNX_STR, PORT } from "../config/config.js";
+import express from "express"
+import { apiRouter } from "../router/api/apiRouter.js";
+import mongoose from "mongoose";
+export class Server{
+    server;
+    constructor(){
+        this.port = PORT,
+        this.app = express()
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use((err, req, res, next) => {
+            console.error(err.stack);
+            res.status(500).send(err.stack);
+          });
+        this.app.use("/api",apiRouter); 
+
+    }
+    connect() {
+        return new Promise((resolve, reject) => {
+          this.server = this.app.listen(this.port, () => {
+            resolve(console.log(`listen ${PORT}`));
+          });
+        });
+      }
+      async connectDb() {
+        await mongoose.connect(MONGODB_CNX_STR, { socketTimeoutMS: 45_000 });
+        return console.log(`DB conectada`);
+      }
+}
