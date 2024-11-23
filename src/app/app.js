@@ -2,6 +2,8 @@ import { MONGODB_CNX_STR, PORT } from "../config/config.js";
 import express from "express"
 import { apiRouter } from "../router/api/apiRouter.js";
 import mongoose from "mongoose";
+import passport from "passport";
+import passportConfig from '../middlewares/passport.config.js';
 export class Server{
     server;
     constructor(){
@@ -14,7 +16,8 @@ export class Server{
             res.status(500).send(err.stack);
           });
         this.app.use("/api",apiRouter); 
-
+        passportConfig(passport);
+        this.app.use(passport.initialize());
     }
     connect() {
         return new Promise((resolve, reject) => {

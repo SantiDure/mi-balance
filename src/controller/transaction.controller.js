@@ -29,11 +29,11 @@ export async function postTransactionController(req, res) {
       }
   }
   
-  //REVISAR
-  export async function putTransactinoController(req, res) {
-    try {
   
-      const updated = await TransactionsService.updateOneService(req.transaction._id, {
+  export async function putTransactinoController(req, res) {
+    const {id} = req.params
+    try {
+      const updated = await TransactionsService.updateOneService(id, {
         $set: req.body,
       });
   

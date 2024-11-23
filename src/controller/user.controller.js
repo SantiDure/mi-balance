@@ -1,9 +1,12 @@
+import { JWT_SECRET } from "../config/config.js";
 import { userService } from "../service/index.service.js";
-
+import jwt from "jsonwebtoken";
+import { hashCompare, hashear } from "../utils/comparepassword.js";
 
 export async function postUserController(req, res) {
   try {
 
+    req.body.password = hashear(req.body.password);
     const user = await userService.createUserService(req.body);
 
     res.status(201).json({
@@ -65,3 +68,24 @@ export async function deleteUserByIdController(req, res) {
     return res.status(500).json({ status: "error", message: error.message });
   }
 }
+
+
+
+export async function loginUser (req, res) {
+  const { email, password } = req.body;
+  try {
+    const user = await userService.getUserByIdService({ email: email });
+    if (!user || !(hashCompare(password, user.password))) {
+      return res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
+
+    const payload = { id: user._id, email: user.email };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    
+    res.json({ message: 'Login exitoso', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
+
