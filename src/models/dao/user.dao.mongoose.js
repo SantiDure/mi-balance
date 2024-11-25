@@ -9,7 +9,6 @@ export class UsersDaoMongoose {
     }
     async readOne(query) {
       const user = await usersManager.findOne(query).lean();
-      console.log(user)
       return user
     }
     async readMany(query) {

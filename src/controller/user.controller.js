@@ -1,15 +1,14 @@
-import { JWT_SECRET } from "../config/config.js";
+import { JWT_SECRET, NODE_ENV } from "../config/config.js";
 import { userService } from "../service/index.service.js";
 import jwt from "jsonwebtoken";
 import { hashCompare, hashear } from "../utils/comparepassword.js";
-
 export async function postUserController(req, res) {
   try {
 
     req.body.password = hashear(req.body.password);
     const user = await userService.createUserService(req.body);
 
-    res.status(201).json({
+    res.status(200).json({
       status: "success",
       payload: user,
     });
@@ -81,11 +80,41 @@ export async function loginUser (req, res) {
 
     const payload = { id: user._id, email: user.email };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-    
-    res.json({ message: 'Login exitoso', token });
+   
+   return res
+    .cookie("access_token", token, {
+      httpOnly:true,
+      secure:true,
+      sameSite: "none", 
+    })
+    .json({ message: 'Login exitoso', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
 
+export async function getUserCurrent(req,res) {
+ 
+   res.json({
+     _id: req.user._id,
+     name: req.user.name, 
+     email: req.user.email,
+     age:req.user.age,
+     role: req.user.role
+   });
+}
+
+export async function logoutUser(req, res) {
+  try {
+    res
+      .clearCookie("access_token", {
+        httpOnly: true,
+        secure: NODE_ENV === "production",
+      })
+      .status(200)
+      .json({ message: "Logout exitoso" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
