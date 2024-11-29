@@ -5,4 +5,4 @@ import { UserRepository } from "./user.service.js";
 
 
 export const userService = new UserRepository(new UsersDaoMongoose());
-export const TransactionsService = new TransactionRepository(new TransactionsDaoMongoose());
+export const transactionsService = new TransactionRepository(new TransactionsDaoMongoose());

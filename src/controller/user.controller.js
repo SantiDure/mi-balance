@@ -95,14 +95,22 @@ export async function loginUser (req, res) {
 };
 
 export async function getUserCurrent(req,res) {
+   
+  try {
+    const user = await userService.getUserByIdService({_id:req.user._id});
+    res.status(200).json({
+      _id: user._id,
+      name: user.name, 
+      email: user.email,
+      age: user.age,
+      transactions:user.transactions,
+      role: user.role
+    });
+  } catch (error) {
+  res.status(500).json({message:error.message})   
+  }
+  
  
-   res.json({
-     _id: req.user._id,
-     name: req.user.name, 
-     email: req.user.email,
-     age:req.user.age,
-     role: req.user.role
-   });
 }
 
 export async function logoutUser(req, res) {
