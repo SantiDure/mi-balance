@@ -1,3 +1,4 @@
+
 import { transactionsService, userService } from "../service/index.service.js";
 
 export async function postTransactionController(req, res) {
@@ -54,6 +55,10 @@ export async function postTransactionController(req, res) {
   export async function deleteTransactionByIdController(req, res) {
     const { id } = req.params;
     try {
+      const updateUser = await userService.updateOneService(req.user._id,   { $pull: { transactions: { _id: id } }  })
+      if(!updateUser) {
+       return res.status(403).json({status:error, message:"prohibido"})
+      }
       const deletedTransaction = await transactionsService.deleteOneService(id);
       if (!deletedTransaction) {
         return res.status(404).json({ status: "error", message: "not found" });
