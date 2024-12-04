@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema({
   _id: { type: String, default: () => randomUUID() },
   category: { type: String, default: "unknow" },
   amount: { type: Number, required: true },
-  description: { type: String },
+  description: { type: String, default:"no description" },
   type: { type: String, enum: ["ingreso", "gasto"], required: true },
   date: {
     type: String,

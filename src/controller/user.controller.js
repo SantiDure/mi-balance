@@ -79,7 +79,15 @@ export async function loginUser (req, res) {
     }
 
     const payload = { id: user._id, email: user.email };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    const userInfo = {
+      _id: user._id,
+      name: user.name, 
+      email: user.email,
+      age: user.age,
+      transactions:user.transactions,
+      role: user.role
+    }
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
    
    return res
     .cookie("access_token", token, {
@@ -87,7 +95,7 @@ export async function loginUser (req, res) {
       secure:true,
       sameSite: "none", 
     })
-    .json({ message: 'Login exitoso', token });
+    .json({ message: 'Login exitoso', userInfo, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error en el servidor' });
