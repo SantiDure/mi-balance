@@ -12,7 +12,7 @@ export class Server{
         this.port = PORT,
         this.app = express()
         this.app.use(cors({
-          origin: "/\.mi-balance\.vercel\.app$/", // Define el origen permitido
+          origin: "https://mi-balance.vercel.app", // Define el origen permitido
           methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
           credentials: true // Permite el uso de cookies y credenciales
       }));
