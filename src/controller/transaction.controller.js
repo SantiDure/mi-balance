@@ -10,6 +10,7 @@ export async function postTransactionController(req, res) {
       res.status(201).json({
         status: "success",
         payload: userUpdated,
+        transaction:transaction
       });
     } catch (error) {
       res.status(400).json({ message: error.message });
