@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema({
   _id: { type: String, default: () => randomUUID() },
   category: { type: String, default: "unknow" },
   amount: { type: Number, required: true },
-  description: { type: String, default:"no description" },
+  description: { type: String },
   type: { type: String, enum: ["ingreso", "gasto"], required: true },
   date: {
     type: String,
@@ -22,4 +22,11 @@ const transactionSchema = new mongoose.Schema({
     versionKey: false,
   })
 
+
+  transactionSchema.pre("save", function (next) {
+    if (this.description === null || this.description === "null") {
+      this.description = "Sin descripción";
+    }
+    next();
+  });
 export const transactionsManager = mongoose.model(collection, transactionSchema)
