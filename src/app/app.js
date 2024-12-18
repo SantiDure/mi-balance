@@ -27,7 +27,6 @@ export class Server{
           methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
           credentials: true,
         }));
-        this.app.options("*", cors()); // Responde a solicitudes preflight
 
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
