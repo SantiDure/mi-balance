@@ -18,7 +18,6 @@ export class Server{
           
         this.app.use(cors({
           origin: function (origin, callback) {
-            // Permite solicitudes desde orígenes en la lista o sin origen (para testing en Postman)
             if (!origin || allowedOrigins.includes(origin)) {
               callback(null, true);
             } else {
