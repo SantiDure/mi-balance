@@ -34,12 +34,13 @@ export async function getUsersController(req, res) {
 
 //REVISAR
 export async function putUserController(req, res) {
+  const { id } = req.params;
   try {
     if (req.body.password) {
-      // req.body.password = hashear(req.body.password);
+       req.body.password = hashear(req.body.password);
     }
 
-    const updated = await userService.updateOneService(req.user._id, {
+    const updated = await userService.updateOneService(id, {
       $set: req.body,
     });
 

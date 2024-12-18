@@ -12,4 +12,4 @@ userRouter.get("/:id", getUserByIdController);
 userRouter.delete("/:id", deleteUserByIdController)
 
 //Revisar desp de hacer el login
-userRouter.put("/", putUserController)
+userRouter.put("/:id", putUserController)
