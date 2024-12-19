@@ -19,13 +19,13 @@ export class Server {
           console.log(allowedOrigins)
           callback(null, true);
         } else {
-          callback(new Error("Not allowed by CORS"));
+          console.log("Not allowed by CORS")
         }
       },
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
     }));
-
+    this.app.options("*", cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser())

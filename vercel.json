@@ -1,18 +1,17 @@
 {
     "builds": [
-    {
-    "src": "./main.js",
-    "use": "@vercel/node"
-    }
+        {
+            "src": "./main.js",
+            "use": "@vercel/node"
+        }
     ],
     "routes": [
-    {
-    "src":"/(.*)",
-    "dest": "/",
-    "headers":{
-        "Access-Control-Allow-Origin":"*"
-    }
-    }
+        {
+            "src": "/(.*)",
+            "dest": "/",
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
     ]
-    }
-    
+}
