@@ -5,7 +5,7 @@
   "description": "servidor de datos para sistema de control de ingresos-gastos mensuales",
   "main": "src/main.js",
   "scripts": {
-  "start": "node src/main.js",
+  "start": "node api/index.js",
   "dev": "cross-env NODE_ENV=development nodemon src/main.js",
   "test": "dev"
 }
