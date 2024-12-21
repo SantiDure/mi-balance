@@ -96,7 +96,7 @@ export async function loginUser (req, res) {
       secure:true,
       sameSite: "none", 
     })
-    .json({ message: 'Login exitoso', userInfo, token });
+    .json({ message: 'Login exitoso', userInfo });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error en el servidor' });

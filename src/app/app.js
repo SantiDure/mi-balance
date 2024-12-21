@@ -13,7 +13,9 @@ export class Server {
       this.app = express()
     const allowedOrigins = [LOCAL_URL, VERCEL_URL];
 
-    this.app.use(cors())
+    this.app.use(cors({
+      origin: VERCEL_URL
+    }))
     // this.app.options("*", cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
