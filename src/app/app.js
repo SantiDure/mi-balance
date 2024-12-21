@@ -13,20 +13,8 @@ export class Server {
       this.app = express()
     const allowedOrigins = [LOCAL_URL, VERCEL_URL];
 
-    this.app.use(cors({
-      origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-          console.log(allowedOrigins)
-          callback(null, true);
-        } else {
-          console.log(origin);
-          callback(new Error("NOT ALLOWED BY CORS" + origin));
-        }
-      },
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      credentials: true,
-    }));
-    this.app.options("*", cors());
+    this.app.use(cors())
+    // this.app.options("*", cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser())
