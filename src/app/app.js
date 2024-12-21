@@ -19,6 +19,7 @@ export class Server {
           console.log(allowedOrigins)
           callback(null, true);
         } else {
+          console.log(origin);
           callback(new Error("NOT ALLOWED BY CORS"));
         }
       },
