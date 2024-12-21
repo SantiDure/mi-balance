@@ -20,7 +20,7 @@ export class Server {
           callback(null, true);
         } else {
           console.log(origin);
-          callback(new Error("NOT ALLOWED BY CORS"));
+          callback(new Error("NOT ALLOWED BY CORS" + origin));
         }
       },
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
