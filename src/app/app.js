@@ -14,6 +14,7 @@ export class Server {
     const allowedOrigins = [LOCAL_URL, VERCEL_URL];
 
     this.app.use(cors({
+      origin:allowedOrigins,
       credentials:true
     }))
     // this.app.options("*", cors());
