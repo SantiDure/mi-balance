@@ -6,7 +6,7 @@
   "main": "src/main.js",
   "scripts": {
   "start": "node api/index.js",
-  "dev": "cross-env NODE_ENV=development nodemon src/main.js",
+  "dev": "cross-env NODE_ENV=development nodemon api/index.js",
   "test": "dev"
 }
 ,

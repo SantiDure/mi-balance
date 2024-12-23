@@ -11,10 +11,9 @@ export class Server {
   constructor() {
     this.port = PORT,
       this.app = express()
-    const allowedOrigins = [LOCAL_URL, VERCEL_URL];
 
     this.app.use(cors({
-      origin:"https://mi-balance.vercel.app",
+      origin: NODE_ENV === "production"? VERCEL_URL : LOCAL_URL,
       credentials:true
     }))
     // this.app.options("*", cors());
