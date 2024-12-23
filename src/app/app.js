@@ -13,7 +13,7 @@ export class Server {
       this.app = express()
 
     this.app.use(cors({
-      origin: NODE_ENV === "production"? VERCEL_URL : LOCAL_URL,
+      origin: NODE_ENV === "production"? "https://mi-balance.vercel.app" : LOCAL_URL,
       credentials:true
     }))
     // this.app.options("*", cors());
