@@ -5,11 +5,10 @@
   "description": "servidor de datos para sistema de control de ingresos-gastos mensuales",
   "main": "src/main.js",
   "scripts": {
-  "start": "node api/index.js",
-  "dev": "cross-env NODE_ENV=development nodemon api/index.js",
-  "test": "dev"
-}
-,
+    "start": "node api/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon api/index.js",
+    "test": "dev"
+  },
   "author": "santidure2002@gmail.com",
   "license": "ISC",
   "dependencies": {
@@ -22,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "mkcert": "^3.2.0",
     "mongoose": "^8.8.2",
+    "mongoose-paginate-v2": "^1.9.0",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1"

@@ -1,4 +1,5 @@
 
+import { transactionsManager } from "../models/transaction.schema.js";
 import { transactionsService, userService } from "../service/index.service.js";
 
 export async function postTransactionController(req, res) {
@@ -26,7 +27,10 @@ export async function postTransactionController(req, res) {
   
   export async function getTransactionsController(req, res) {
       try {
-        const transactions = await transactionsService.getTransactionsService({});
+        const options = {
+          page: 1,
+          limit: 10,}
+        const transactions = await transactionsManager.paginate({},options);
         return res.status(200).json({ status: "success", payload: transactions });
       } catch (error) {
         return res.status(500).json({ status: "error", message: error.message });

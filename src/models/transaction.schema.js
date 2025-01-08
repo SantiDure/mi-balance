@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import  mongoosePaginate  from "mongoose-paginate-v2";
 import {randomUUID} from "node:crypto"
 const collection = "transactions";
 const transactionSchema = new mongoose.Schema({
@@ -23,10 +24,14 @@ const transactionSchema = new mongoose.Schema({
   })
 
 
+
   transactionSchema.pre("save", function (next) {
     if (this.description === null || this.description === "null") {
       this.description = "Sin descripción";
     }
     next();
   });
+
+  transactionSchema.plugin(mongoosePaginate)
+
 export const transactionsManager = mongoose.model(collection, transactionSchema)
