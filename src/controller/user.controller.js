@@ -1,7 +1,8 @@
 import { JWT_SECRET, NODE_ENV } from "../config/config.js";
-import { userService } from "../service/index.service.js";
+import { transactionsService, userService } from "../service/index.service.js";
 import jwt from "jsonwebtoken";
 import { hashCompare, hashear } from "../utils/comparepassword.js";
+import { transactionsManager } from "../models/transaction.schema.js";
 export async function postUserController(req, res) {
   try {
 
@@ -31,6 +32,48 @@ export async function getUsersController(req, res) {
       return res.status(500).json({ status: "error", message: error.message });
     }
 }
+
+export async function getTransactionsForMonth(req, res) {
+  try {
+    const { uid, month } = req.params;
+
+    // Obtén el usuario por su ID
+    const user = await userService.getUserByIdService({ _id: uid });
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Establece el rango de fechas para el mes actual
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, month - 1, 1); // Primer día del mes
+    const endDate = new Date(currentYear, month, 0); // Último día del mes
+
+    // Filtra las transacciones
+    const transactions = await transactionsManager.find({
+      _id: { $in: user.transactions },
+    });
+
+    // Filtra las transacciones basadas en el rango de fechas
+    const filteredTransactions = transactions.filter((transaction) => {
+      const [datePart, timePart] = transaction.date.split(", ");
+      const [day, month, year] = datePart.split("/").map(Number);
+      const formattedDate = new Date(
+        2000 + year, // Aseguramos el formato del año completo
+        month - 1,
+        day
+      );
+
+      return formattedDate >= startDate && formattedDate <= endDate;
+    });
+
+    // Responde con las transacciones filtradas
+    res.status(200).json({ payload: filteredTransactions });
+  } catch (error) {
+    console.error("Error al obtener transacciones:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+}
+
 
 //REVISAR
 export async function putUserController(req, res) {
