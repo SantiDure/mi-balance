@@ -35,7 +35,7 @@ export async function getUsersController(req, res) {
 
 export async function getTransactionsForMonth(req, res) {
   try {
-    const { uid, month } = req.params;
+    const { uid, month, year } = req.params;
 
     // Obtén el usuario por su ID
     const user = await userService.getUserByIdService({ _id: uid });
@@ -43,10 +43,11 @@ export async function getTransactionsForMonth(req, res) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Establece el rango de fechas para el mes actual
-    const currentYear = new Date().getFullYear();
-    const startDate = new Date(currentYear, month - 1, 1); // Primer día del mes
-    const endDate = new Date(currentYear, month, 0); // Último día del mes
+    // Establece el rango de fechas basado en el mes y el año (por defecto el año actual)
+    const selectedYear = year ? Number(year) : new Date().getFullYear();
+    const selectedMonth = Number(month); // Convertir el mes a número
+    const startDate = new Date(selectedYear, selectedMonth - 1, 1, 0, 0, 0);
+    const endDate = new Date(selectedYear, selectedMonth, 0, 23, 59, 59);
 
     // Filtra las transacciones
     const transactions = await transactionsManager.find({
@@ -57,22 +58,37 @@ export async function getTransactionsForMonth(req, res) {
     const filteredTransactions = transactions.filter((transaction) => {
       const [datePart, timePart] = transaction.date.split(", ");
       const [day, month, year] = datePart.split("/").map(Number);
+      const [time, period] = timePart.trim().split(" ");
+      const [hours, minutes, seconds] = time.split(":").map(Number);
+      const formattedHours = period === "p. m." && hours !== 12 ? hours + 12 : hours === 12 && period === "a. m." ? 0 : hours;
+
       const formattedDate = new Date(
-        2000 + year, // Aseguramos el formato del año completo
-        month - 1,
-        day
+        2000 + year, // Año completo
+        month - 1, // Mes
+        day, // Día
+        formattedHours, // Hora
+        minutes, // Minutos
+        seconds // Segundos
       );
 
       return formattedDate >= startDate && formattedDate <= endDate;
     });
 
-    // Responde con las transacciones filtradas
-    res.status(200).json({ payload: filteredTransactions });
+    // Ordena las transacciones por día en orden descendente
+    const sortedTransactions = filteredTransactions.sort((a, b) => {
+      const [aDay] = a.date.split(", ")[0].split("/").map(Number);
+      const [bDay] = b.date.split(", ")[0].split("/").map(Number);
+      return bDay - aDay; // Orden descendente
+    });
+
+    // Responde con las transacciones ordenadas
+    res.status(200).json({ payload: sortedTransactions });
   } catch (error) {
     console.error("Error al obtener transacciones:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 }
+
 
 
 //REVISAR

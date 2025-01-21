@@ -8,8 +8,8 @@ userRouter.post("/logout", logoutUser)
 userRouter.post("/", postUserController);
 userRouter.get("/", getUsersController);
 userRouter.get("/current",passport.authenticate('jwt', { session: false }),getUserCurrent)
-userRouter.get("/:uid/transactions/:month"
-    // ,    passport.authenticate('jwt', { session: false })
+userRouter.get("/:uid/transactions/:month/:year"
+     ,    passport.authenticate('jwt', { session: false })
 ,getTransactionsForMonth)
 userRouter.get("/:id", getUserByIdController);
 userRouter.delete("/:id", deleteUserByIdController)
